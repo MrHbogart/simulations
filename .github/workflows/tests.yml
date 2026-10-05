@@ -1,0 +1,18 @@
+name: physics-tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [room-acoustics, semiconductor-physics, antenna-em]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install "numpy>=2.0" scipy matplotlib tqdm pytest
+      - run: python -m pytest -q tests
+        working-directory: ${{ matrix.project }}

@@ -1,0 +1,39 @@
+{
+  "run": {
+    "name": "supercell_tightbinding_si",
+    "results_root": "results_supercell_tightbinding",
+    "tag": "baseline"
+  },
+  "silicon": {
+    "lattice_constant_m": 5.431e-10,
+    "repeats": [
+      10,
+      10,
+      10
+    ],
+    "hopping_ev": -1.2,
+    "r_decay_fraction": 0.25,
+    "cutoff_factor": 1.2,
+    "target_gap_ev": 1.12,
+    "delta_bounds": [
+      0.3,
+      1.4
+    ]
+  },
+  "dopants": {
+    "donor_count": 2,
+    "acceptor_count": 2,
+    "interstitial_count": 1,
+    "strengths_ev": {
+      "P_sub": 0.12,
+      "B_sub": -0.12,
+      "Li_i": 0.08
+    },
+    "sigma_fraction": 0.65
+  },
+  "derived": {
+    "volume_cm3": 4.0047869497749974e-20,
+    "donor_cm3": 4.9940234651243225e+19,
+    "acceptor_cm3": 4.9940234651243225e+19
+  }
+}

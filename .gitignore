@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.env
+
+# Large regenerable output (~20 MB); the GIF next to it is committed instead
+room-acoustics/result/*/pressure_field_animation.html
