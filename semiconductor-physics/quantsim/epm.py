@@ -17,6 +17,7 @@ __all__ = [
     "DopantPerturbation",
     "EpmResult",
     "solve_epm_band_structure",
+    "epm_energies",
     "calibrate_form_factors_to_gap",
     "apply_scissor_correction",
 ]
@@ -138,24 +139,9 @@ def solve_epm_band_structure(
         ticks.append(distances[index])
         labels.append(path.labels[len(labels)])
 
-    basis_frac = model.structure_basis
-    energies = []
-    for k_vec in k_cart:
-        g_vectors = g_pool[np.linalg.norm(k_vec + g_pool, axis=1) <= g_cut + 1.0e-12 * g_cut]
-        if g_vectors.shape[0] < n_bands:
-            raise ValueError("Too few plane waves for n_bands; increase g_cut")
-        h_mat = _build_hamiltonian(
-            k_vec,
-            g_vectors,
-            lattice,
-            vs_form_factors,
-            va_form_factors,
-            model.lattice_constant_m,
-            model.structure_basis,
-        )
-        vals = np.linalg.eigvalsh(h_mat)
-        energies.append(vals[:n_bands])
-    energies_ev = np.asarray(energies)
+    energies_ev = _energies_at(
+        k_cart, g_pool, g_cut, n_bands, lattice, model, vs_form_factors, va_form_factors
+    )
 
     vbm_ev, cbm_ev, vbm_k, cbm_k = _band_edges_from_bands(
         energies_ev, valence_band_index
@@ -193,6 +179,37 @@ def solve_epm_band_structure(
         direct_gap_ev=direct_gap_ev,
         is_direct_gap=is_direct,
     )
+
+
+def epm_energies(
+    lattice: Lattice, model: EmpiricalPseudopotential, k_cart: np.ndarray, g_cut: float, n_bands: int = 8
+) -> np.ndarray:
+    """Lowest `n_bands` eigenvalues (eV) at arbitrary Cartesian k-points, shape (N, n_bands)."""
+    k_cart = np.atleast_2d(k_cart)
+    k_max = float(np.max(np.linalg.norm(k_cart, axis=1)))
+    g_pool = _generate_g_vectors(lattice, g_cut + k_max)
+    return _energies_at(
+        k_cart, g_pool, g_cut, n_bands, lattice, model, model.vs_form_factors_ev, model.va_form_factors_ev
+    )
+
+
+def _energies_at(k_cart, g_pool, g_cut, n_bands, lattice, model, vs_form_factors, va_form_factors):
+    energies = []
+    for k_vec in k_cart:
+        g_vectors = g_pool[np.linalg.norm(k_vec + g_pool, axis=1) <= g_cut + 1.0e-12 * g_cut]
+        if g_vectors.shape[0] < n_bands:
+            raise ValueError("Too few plane waves for n_bands; increase g_cut")
+        h_mat = _build_hamiltonian(
+            k_vec,
+            g_vectors,
+            lattice,
+            vs_form_factors,
+            va_form_factors,
+            model.lattice_constant_m,
+            model.structure_basis,
+        )
+        energies.append(np.linalg.eigvalsh(h_mat)[:n_bands])
+    return np.asarray(energies)
 
 
 def _build_hamiltonian(

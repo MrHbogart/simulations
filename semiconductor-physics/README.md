@@ -23,6 +23,14 @@ The model reproduces the textbook silicon band structure without fitting:
 
 A local EPM underestimates the indirect gap (≈0.8 eV here), so the notebook applies a scissor correction to 1.12 eV plus empirical band-gap narrowing for the doping level.
 
+### In 3D
+
+`render_3d.py` evaluates the same EPM Hamiltonian at arbitrary k-points (`quantsim.epm_energies`). It plots the bands over the whole $k_z=0$ plane and finds every state within 150 meV of the conduction-band minimum in the first Brillouin zone. These are silicon's six Δ valleys, elongated along ⟨100⟩ because the longitudinal mass is about 5× the transverse mass.
+
+| Bands over $k_z = 0$ | Conduction valleys |
+|:--:|:--:|
+| ![Band surfaces](results_silicon_epm_diode/silicon_epm_diode_t300k_n1.0e19_p1.0e16_baseline_20261005_122744/si_band_surfaces_3d.png) | ![Valleys](results_silicon_epm_diode/silicon_epm_diode_t300k_n1.0e19_p1.0e16_baseline_20261005_122744/si_conduction_valleys_3d.gif) |
+
 ## Carriers, junction and solar limit
 
 - Varshni $E_g(T)$, $N_{c,v}\propto T^{3/2}$, intrinsic density $n_i(T)$, and Fermi level from band-edge Boltzmann statistics.
@@ -52,6 +60,7 @@ pip install -r ../requirements.txt
 jupyter notebook silicon_epm_diode.ipynb          # ~20 s
 jupyter notebook supercell_tightbinding_si.ipynb  # ~1 min
 python -m pytest -q tests
+python render_3d.py                               # 3D band surfaces and valleys, ~40 s
 ```
 
 The tests check the FCC k-path coordinates, the EPM band features above, SQ power and efficiency, Fermi-level bounds, and diamond coordination.
@@ -59,7 +68,8 @@ The tests check the FCC k-path coordinates, the EPM band features above, SQ powe
 ## Layout
 
 - `quantsim/lattice.py`, `bz.py`: Bravais lattices, reciprocal lattice, high-symmetry k-paths (fractional coordinates)
-- `quantsim/epm.py`: plane-wave EPM solver, scissor correction, form-factor calibration
+- `quantsim/epm.py`: plane-wave EPM solver (`epm_energies` for arbitrary k), scissor correction, form-factor calibration
+- `render_3d.py`: 3D band surfaces and conduction valleys
 - `quantsim/tightbinding.py`: supercell builder, periodic neighbour search, Hamiltonian, DOS
 - `quantsim/stats.py`, `fermi.py`, `doping.py`, `diode.py`, `solar.py`: carrier statistics and device models
 - `quantsim/plotting.py`: band-structure and crystal plots

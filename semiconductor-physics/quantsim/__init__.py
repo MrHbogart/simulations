@@ -15,6 +15,7 @@ from .epm import (
     EmpiricalPseudopotential,
     apply_scissor_correction,
     calibrate_form_factors_to_gap,
+    epm_energies,
     solve_epm_band_structure,
 )
 from .doping import DopantCase, band_gap_narrowing_si
@@ -73,6 +74,7 @@ __all__ = [
     "apply_scissor_correction",
     "calibrate_form_factors_to_gap",
     "solve_epm_band_structure",
+    "epm_energies",
     "DopantCase",
     "band_gap_narrowing_si",
     "fermi_dirac",

@@ -33,6 +33,12 @@ Sabine and Eyring formulas assume a *diffuse* sound field. A specular shoebox ro
 
 `tests/test_physics.py` checks the image geometry (all six first-order mirrors, image counts) and the decay-vs-theory agreement to within 10%.
 
+## Image sources in 3D
+
+![Image sources](result/room10.0x5.0x2.7_nx100_ny50_nz27_abs0p20_ref2/image_sources_3d.gif)
+
+Each mirrored box is one image room up to second order. The image source inside it is coloured by reflection count and sized by its amplitude at the listener (★). Green lines trace the six first-order paths (source → wall → listener) and dotted lines continue them to their images. Rebuild it with `python render_3d.py`.
+
 ## Damper placement
 
 ![Damper ranking](result/room10.0x5.0x2.7_nx100_ny50_nz27_abs0p20_ref2/damper_ranking.png)
@@ -45,6 +51,7 @@ The floor patch under the source–listener path ranks first, as expected: the f
 pip install -r ../requirements.txt
 jupyter notebook room_simulation.ipynb   # ~3 min end to end
 python -m pytest -q tests
+python render_3d.py                      # 3D image-source render, ~30 s
 ```
 
 The notebook also writes `pressure_field_animation.html`, an interactive 3D isosurface animation (~20 MB, not committed).
@@ -55,6 +62,7 @@ The notebook also writes `pressure_field_animation.html`, an interactive 3D isos
 - `soundwaves/simulation.py`: pressure field, impulse response, reflection arrivals
 - `soundwaves/analysis.py`: decay curves, RT/clarity metrics, octave bands, damper model
 - `soundwaves/visualization.py`: Plotly 3D animations and report figures
+- `render_3d.py`: rotating 3D image-source render (Matplotlib)
 - `result/`: outputs of the committed run
 
 ## Limitations

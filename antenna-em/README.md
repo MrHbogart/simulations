@@ -26,6 +26,10 @@ Derived quantities: $|\mathbf{E}|$, $|\mathbf{H}|$, the time-averaged Poynting v
 
 **`single_antenna.ipynb`**: one antenna (here a 1 m V-dipole with a 50° opening at 300 MHz). Produces E/H field slices on three planes, Poynting flow, wavefront phase, 3D field views and the far-field pattern.
 
+![3D radiation pattern](results/wire_v_dipole_f300MHz_n181_planexz_angle50deg_L1m/radiation_pattern_3d.gif)
+
+The full 3D far-field pattern (`render_3d.py`) shows the antenna is 1 λ long, so the current peaks mid-arm instead of at the feed. Its z-components cancel between the arms, and the main lobes point along ±x in the plane of the V.
+
 | Far-field pattern | E-field, x–y plane |
 |:--:|:--:|
 | ![Far field](results/wire_v_dipole_f300MHz_n181_planexz_angle50deg_L1m/far_field_pattern_xz.png) | ![E slice](results/wire_v_dipole_f300MHz_n181_planexz_angle50deg_L1m/E_slice_x-y_plane__z_0_.gif) |
@@ -43,6 +47,7 @@ pip install -r ../requirements.txt
 jupyter notebook single_antenna.ipynb       # ~6 min on 4 cores (151^3 grid, 360 wire segments)
 jupyter notebook multi_antenna_link.ipynb   # ~3 min
 python -m pytest -q tests
+python render_3d.py                         # 3D radiation pattern, ~1.5 min
 ```
 
 Animations are written as GIFs to `results/<run-id>/` and not embedded in the notebooks, which keeps the notebooks small.
@@ -52,6 +57,7 @@ Animations are written as GIFs to `results/<run-id>/` and not embedded in the no
 - `emsim/antenna.py`: dipole and polyline wire antennas, path generators, arc-length resampling
 - `emsim/fields.py`: Hertzian dipole fields and segment superposition, plus a toy conductor-interior model
 - `emsim/grid.py`, `emsim/viz.py`: grids, spherical coordinates, field magnitude, Poynting vector
+- `render_3d.py`: rotating 3D far-field radiation pattern
 
 ## Limitations
 
